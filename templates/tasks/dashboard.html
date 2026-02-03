@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <h2 class="mb-4">My Tasks</h2>
+        {% if tasks %}
+        <div class="list-group">
+            {% for task in tasks %}
+            <div class="list-group-item d-flex justify-content-between align-items-center {% if task.status == 'completed' %}completed-task{% endif %}">
+                <div>
+                    <h5 class="mb-1">{{ task.title }}</h5>
+                    {% if task.description %}<p class="mb-1">{{ task.description }}</p>{% endif %}
+                    <small class="text-muted">Created: {{ task.created_at|date:"M d, Y H:i" }}</small>
+                </div>
+                <div class="btn-group">
+                    <a href="{% url 'toggle_task' task.id %}" class="btn btn-sm btn-outline-success" title="Toggle Status">
+                        {% if task.status == 'completed' %}Mark Pending{% else %}Mark Completed{% endif %}
+                    </a>
+                    <a href="{% url 'edit_task' task.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{% url 'delete_task' task.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                </div>
+                {% if task.status == 'completed' %}
+                <span class="badge bg-success ms-2">Completed</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">No tasks yet. <a href="{% url 'add_task' %}">Add your first task</a>!</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
